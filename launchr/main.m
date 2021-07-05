@@ -35,7 +35,7 @@ int main(int argc, const char * argv[]) {
         const int lsSpawnFlags = atoi(argv[2]); // 0 for normal launch, 1 to launch suspended
 
         NSString const* executablePath = [NSString stringWithUTF8String:argv[3]];
-
+        
         load_private_framework(@"RunningBoardServices");
         
         Class cRbsLaunchContext = NSClassFromString(@"RBSLaunchContext");
@@ -44,9 +44,10 @@ int main(int argc, const char * argv[]) {
 
         // TODO: create proper container for data
         
+        NSMutableDictionary *infoPlistDic = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/Info.plist", [executablePath stringByDeletingLastPathComponent]]];
+
         NSString* jobLabel;
-        
-        NSString const* bundleId = [NSString stringWithFormat:@"nl.srepsa.%@", [executablePath lastPathComponent]];
+        NSString const* bundleId = [infoPlistDic objectForKey:@"CFBundleIdentifier"];
 
 
         NSUUID *uuid = [NSUUID UUID];
