@@ -42,6 +42,7 @@ int main(int argc, const char * argv[]) {
         Class cRbsLaunchRequest = NSClassFromString(@"RBSLaunchRequest");
         Class cRbsProcessIdentity = NSClassFromString(@"RBSProcessIdentity");
 
+        // TODO: find out how to get rid of the runningboard watchdog, our child is being killed in ~30s when launched suspended now
         // TODO: create proper container for data
         
         NSMutableDictionary *infoPlistDic = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/Info.plist", [executablePath stringByDeletingLastPathComponent]]];
