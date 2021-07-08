@@ -1,6 +1,6 @@
 # launchr
 
-Tool for launching iOS apps on ARM Macs, with full control.
+Tool for launching graphical iOS and macOS apps on ARM Macs, with full control.
 
 ## Usage
 
