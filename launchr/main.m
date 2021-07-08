@@ -20,24 +20,35 @@ void load_private_framework(NSString const* framework) {
 }
 
 void print_usage(void) {
-    fprintf(stderr, "Usage: launchr <platform> <launch_suspended> <path_to_executable>\n");
+    fprintf(stderr, "Usage: launchr [-platform macos|ios] [-mode suspended|running] [-envfile <path_to_env_plist>] -exec <path_to_executable>\n");
 }
 
 int main(int argc, const char * argv[]) {
     @autoreleasepool {
         
-        if (argc < 4) {
+        load_private_framework(@"RunningBoardServices");
+
+        NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
+        NSString const* runMode = [standardDefaults stringForKey:@"mode"];
+        NSString const* platform = [standardDefaults stringForKey:@"platform"];
+        NSString const* executablePath = [standardDefaults stringForKey:@"exec"];
+
+        int platformIdentifier = 2; // 2 for ios, 1 for macos
+        int lsSpawnFlags = 0; // 0 for normal launch, 1 to launch suspended
+        
+        if (!([executablePath length] > 0)) {
             print_usage();
             exit(1);
         }
         
-        const int platform = atoi(argv[1]);  // 1 for macos, 2 for iOS
-        const int lsSpawnFlags = atoi(argv[2]); // 0 for normal launch, 1 to launch suspended
+        if ([platform isEqualToString:@"macos"]) {
+            platformIdentifier = 1;
+        }
 
-        NSString const* executablePath = [NSString stringWithUTF8String:argv[3]];
-        
-        load_private_framework(@"RunningBoardServices");
-        
+        if ([runMode isEqualToString:@"suspended"]) {
+            lsSpawnFlags = 1;
+        }
+                
         Class cRbsLaunchContext = NSClassFromString(@"RBSLaunchContext");
         Class cRbsLaunchRequest = NSClassFromString(@"RBSLaunchRequest");
         Class cRbsProcessIdentity = NSClassFromString(@"RBSProcessIdentity");
@@ -50,23 +61,42 @@ int main(int argc, const char * argv[]) {
         NSString* jobLabel;
         NSString const* bundleId = [infoPlistDic objectForKey:@"CFBundleIdentifier"];
 
-
         NSUUID *uuid = [NSUUID UUID];
-        jobLabel = [NSString stringWithFormat:@"%@-%@",bundleId,uuid];
+        NSString *envFile = [standardDefaults stringForKey:@"envfile"];
+        NSDictionary *env = nil;
         
-        NSLog(@"Submitting job: %@", jobLabel);
-        RBSProcessIdentity* identity = [cRbsProcessIdentity identityForApplicationJobLabel:jobLabel bundleID:bundleId platform:platform];
+        if ([envFile length] > 0) {
+            
+            env = [[NSDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@", envFile]];
 
+            if ([env count] < 1) {
+                print_usage();
+                exit(1);
+            }
+            
+            NSLog(@"Using additional environment variables:\n%@", env);
+        }
+        
+        jobLabel = [NSString stringWithFormat:@"%@-%@",bundleId,uuid]; // Add the UUID to have unique job names if spawning multiple instances of the same app
+
+        NSLog(@"Submitting job: %@", jobLabel);
+        
+        RBSProcessIdentity* identity = [cRbsProcessIdentity identityForApplicationJobLabel:jobLabel bundleID:bundleId platform:platformIdentifier];
         RBSLaunchContext* context = [cRbsLaunchContext contextWithIdentity:identity];
+        
         [context setExecutablePath:executablePath];
         [context setLsSpawnFlags:lsSpawnFlags];
+        [context setEnvironment:env ];
 
         RBSLaunchRequest* request = [[cRbsLaunchRequest alloc] initWithContext:context];
         
         NSError* errResult;
         BOOL success = [request execute:&context error:&errResult];
 
-        NSLog(@"errResult: %@, Success: %x", errResult, success);
+        if (!success) {
+            NSLog(@"Error: %@", errResult);
+            exit(1);
+        }
 
     }
     return 0;

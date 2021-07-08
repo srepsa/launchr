@@ -16,6 +16,7 @@
 @end
 
 @interface RBSLaunchContext : NSObject
+@property (nonatomic,copy) NSDictionary * environment;
 + (id)contextWithIdentity:(id)arg1;
 + (id)context;
 - (void)setExecutablePath:(id)arg1;
