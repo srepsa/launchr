@@ -94,7 +94,7 @@ int main(int argc, const char * argv[]) {
         [context setStandardErrorPath:stderrPath];
         // TODO: below is not effective, WIP
         [context setLsInitialRole:7]; // Activate (foreground) app upon launch
-        [context setEnvironment:env ];
+        [context setEnvironment:env];
 
         RBSLaunchRequest* request = [[cRbsLaunchRequest alloc] initWithContext:context];
         
