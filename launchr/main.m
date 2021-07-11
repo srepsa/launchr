@@ -31,7 +31,7 @@ int main(int argc, const char * argv[]) {
         NSUserDefaults *standardDefaults = [NSUserDefaults standardUserDefaults];
         NSString const* runMode = [standardDefaults stringForKey:@"mode"];
         NSString const* platform = [standardDefaults stringForKey:@"platform"];
-        NSString const* executablePath = [standardDefaults stringForKey:@"exec"];
+        NSString* executablePath = [standardDefaults stringForKey:@"exec"];
 
         int platformIdentifier = 2; // 2 for ios, 1 for macos
         int lsSpawnFlags = 0; // 0 for normal launch, 1 to launch suspended
@@ -53,7 +53,7 @@ int main(int argc, const char * argv[]) {
         Class cRbsLaunchRequest = NSClassFromString(@"RBSLaunchRequest");
         Class cRbsProcessIdentity = NSClassFromString(@"RBSProcessIdentity");
 
-        // TODO: find out how to get rid of the runningboard watchdog, our child is being killed in ~30s when launched suspended now
+        // TODO: find out how to get rid of the runningboard watchdog, our child is being killed in ~30s when launched suspended now. This is Jetsam, find out how to configure
         // TODO: create proper container for data
         
         NSMutableDictionary *infoPlistDic = [[NSMutableDictionary alloc] initWithContentsOfFile:[NSString stringWithFormat:@"%@/Info.plist", [executablePath stringByDeletingLastPathComponent]]];
@@ -84,8 +84,16 @@ int main(int argc, const char * argv[]) {
         RBSProcessIdentity* identity = [cRbsProcessIdentity identityForApplicationJobLabel:jobLabel bundleID:bundleId platform:platformIdentifier];
         RBSLaunchContext* context = [cRbsLaunchContext contextWithIdentity:identity];
         
+        NSString *outPath = NSTemporaryDirectory();
+        NSString *stdoutPath = [outPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_stdout.txt",jobLabel]];
+        NSString *stderrPath = [outPath stringByAppendingPathComponent:[NSString stringWithFormat:@"%@_stderr.txt",jobLabel]];
+        
         [context setExecutablePath:executablePath];
         [context setLsSpawnFlags:lsSpawnFlags];
+        [context setStandardOutputPath:stdoutPath];
+        [context setStandardErrorPath:stderrPath];
+        // TODO: below is not effective, WIP
+        [context setLsInitialRole:7]; // Activate (foreground) app upon launch
         [context setEnvironment:env ];
 
         RBSLaunchRequest* request = [[cRbsLaunchRequest alloc] initWithContext:context];
@@ -97,6 +105,8 @@ int main(int argc, const char * argv[]) {
             NSLog(@"Error: %@", errResult);
             exit(1);
         }
+        
+        NSLog(@"Redirecting child's output to %@", outPath);
 
     }
     return 0;

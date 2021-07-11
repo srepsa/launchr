@@ -17,11 +17,14 @@
 
 @interface RBSLaunchContext : NSObject
 @property (nonatomic,copy) NSDictionary * environment;
+@property (nonatomic,copy) NSString * standardOutputPath;
+@property (nonatomic,copy) NSString * standardErrorPath;
+@property (nonatomic,copy) NSString * executablePath;
+@property (nonatomic) unsigned long lsSpawnFlags;
+@property (nonatomic) unsigned int lsInitialRole;
+
 + (id)contextWithIdentity:(id)arg1;
 + (id)context;
-- (void)setExecutablePath:(id)arg1;
-- (void)setLsSpawnFlags:(int)arg1;
-- (void)setLsInitialRole:(int)arg1;
 @end
 
 @interface RBSLaunchRequest : NSObject

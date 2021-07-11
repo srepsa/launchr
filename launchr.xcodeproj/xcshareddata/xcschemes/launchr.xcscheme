@@ -52,15 +52,7 @@
       </BuildableProductRunnable>
       <CommandLineArguments>
          <CommandLineArgument
-            argument = "2"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "0"
-            isEnabled = "YES">
-         </CommandLineArgument>
-         <CommandLineArgument
-            argument = "/Users/jim/Applications/Hub.app/Hub"
+            argument = "-exec /Users/jim/Applications/Hub.app/Hub"
             isEnabled = "YES">
          </CommandLineArgument>
       </CommandLineArguments>
