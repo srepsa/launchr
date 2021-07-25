@@ -33,7 +33,7 @@ int main(int argc, const char * argv[]) {
         NSString const* platform = [standardDefaults stringForKey:@"platform"];
         NSString* executablePath = [standardDefaults stringForKey:@"exec"];
 
-        int platformIdentifier = 2; // 2 for ios, 1 for macos
+        int platformIdentifier = PLATFORM_IOS; // 2 for ios, 1 for macos
         int lsSpawnFlags = 0; // 0 for normal launch, 1 to launch suspended
         
         if (!([executablePath length] > 0)) {
@@ -42,7 +42,7 @@ int main(int argc, const char * argv[]) {
         }
         
         if ([platform isEqualToString:@"macos"]) {
-            platformIdentifier = 1;
+            platformIdentifier = PLATFORM_MACOS;
         }
 
         if ([runMode isEqualToString:@"suspended"]) {

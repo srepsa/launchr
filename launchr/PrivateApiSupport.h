@@ -8,6 +8,9 @@
 #ifndef PrivateApiSupport_h
 #define PrivateApiSupport_h
 
+#define PLATFORM_IOS 2
+#define PLATFORM_MACOS 1
+
 @class RBSProcessIdentity;
 
 @interface RBSProcessIdentity : NSObject
