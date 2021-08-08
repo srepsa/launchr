@@ -35,3 +35,7 @@ Disable AMFI by adding a boot parameter (note that SIP needs to be disabled for 
 ```console
 sudo nvram boot-args="amfi_get_out_of_my_way=1"
 ```
+
+## Credits
+
+* dyld patching code: Samuel Groß (Google Project Zero).
