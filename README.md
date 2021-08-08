@@ -5,7 +5,7 @@ Tool for launching graphical iOS and macOS apps on ARM Macs, with full control.
 ## Usage
 
 ```console
-launchr [-platform macos|ios] [-mode suspended|running] [-envfile <path_to_env_plist>] -exec <path_to_executable>
+Usage: launchr [-platform macos|ios] [-allowinterpose yes] [-mode suspended|running] [-envfile <path_to_env_plist>] -exec <path_to_executable>
 ```
 
 Example `env.plist`:
