@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		38533C7F26BFD45000AA386B /* dyld_patch.c in Sources */ = {isa = PBXBuildFile; fileRef = 38533C7E26BFD45000AA386B /* dyld_patch.c */; };
 		38CB89C026906625008C88AD /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 38CB89BF26906625008C88AD /* main.m */; };
 /* End PBXBuildFile section */
 
@@ -24,6 +25,9 @@
 
 /* Begin PBXFileReference section */
 		383B3CD42691C0920076E024 /* PrivateApiSupport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrivateApiSupport.h; sourceTree = "<group>"; };
+		38533C7D26BFD45000AA386B /* dyld_patch.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = dyld_patch.h; sourceTree = "<group>"; };
+		38533C7E26BFD45000AA386B /* dyld_patch.c */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.c; path = dyld_patch.c; sourceTree = "<group>"; };
+		38533C8126BFE73000AA386B /* entitlements.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = entitlements.plist; sourceTree = "<group>"; };
 		38CB89BC26906625008C88AD /* launchr */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = launchr; sourceTree = BUILT_PRODUCTS_DIR; };
 		38CB89BF26906625008C88AD /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -60,6 +64,9 @@
 			children = (
 				38CB89BF26906625008C88AD /* main.m */,
 				383B3CD42691C0920076E024 /* PrivateApiSupport.h */,
+				38533C7D26BFD45000AA386B /* dyld_patch.h */,
+				38533C7E26BFD45000AA386B /* dyld_patch.c */,
+				38533C8126BFE73000AA386B /* entitlements.plist */,
 			);
 			path = launchr;
 			sourceTree = "<group>";
@@ -121,6 +128,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				38CB89C026906625008C88AD /* main.m in Sources */,
+				38533C7F26BFD45000AA386B /* dyld_patch.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -241,20 +249,25 @@
 		38CB89C426906625008C88AD /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5M426N573Y;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
 				ENABLE_HARDENED_RUNTIME = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Debug;
 		};
 		38CB89C526906625008C88AD /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 5M426N573Y;
-				ENABLE_HARDENED_RUNTIME = YES;
+				CODE_SIGN_ENTITLEMENTS = launchr/launchrRelease.entitlements;
+				CODE_SIGN_IDENTITY = "-";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = "";
+				ENABLE_HARDENED_RUNTIME = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 			};
 			name = Release;
 		};

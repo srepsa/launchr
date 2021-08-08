@@ -24,7 +24,9 @@
 @property (nonatomic,copy) NSString * standardErrorPath;
 @property (nonatomic,copy) NSString * executablePath;
 @property (nonatomic) unsigned long lsSpawnFlags;
+@property (nonatomic) BOOL lsManageRoleOnly;
 @property (nonatomic) unsigned int lsInitialRole;
+@property (nonatomic) unsigned int executionOptions;
 
 + (id)contextWithIdentity:(id)arg1;
 + (id)context;
@@ -40,4 +42,12 @@
 - (void)fetchInfoForAppWithBundleID:(id)arg1 wrapperURL:(id)arg2 completion:(id)arg3;
 @end
 
+@interface RBSProcessHandle : NSObject
++ (id)handleForPredicate:(id)arg1 error:(out id*)arg2;
+- (int) rbs_pid;
+@end
+
+@interface RBSProcessPredicate : NSObject
++ (id)predicateMatchingIdentity:(id)arg1;
+@end
 #endif /* PrivateApiSupport_h */
